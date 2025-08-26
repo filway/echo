@@ -1,0 +1,9 @@
+const Page = () => {
+  return (
+    <div>
+      <h1>Vapi Plugin</h1>
+    </div>
+  )
+}
+
+export default Page
