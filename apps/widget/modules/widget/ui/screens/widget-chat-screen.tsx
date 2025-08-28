@@ -13,7 +13,7 @@ import { ArrowLeftIcon, MenuIcon } from 'lucide-react'
 import { Button } from '@workspace/ui/components/button'
 import { useAction, useQuery } from 'convex/react'
 import { api } from '@workspace/backend/_generated/api'
-import { userInfiniteScroll } from '@workspace/ui/hooks/use-infinite-scroll'
+import { useInfiniteScroll } from '@workspace/ui/hooks/use-infinite-scroll'
 import { InfiniteScrollTrigger } from '@workspace/ui/components/infinite-scroll-trigger'
 
 import {
@@ -83,7 +83,7 @@ export const WidgetChatScreen = () => {
   )
 
   const { topElementRef, handleLoadMore, canLoadMore, isLoadingMore } =
-    userInfiniteScroll({
+    useInfiniteScroll({
       status: messages.status,
       loadMore: messages.loadMore,
       loadSize: 10,

@@ -7,7 +7,7 @@ interface UseInfiniteScrollProps {
   observerEnabled?: boolean
 }
 
-export const userInfiniteScroll = ({
+export const useInfiniteScroll = ({
   status,
   loadMore,
   loadSize = 10,
