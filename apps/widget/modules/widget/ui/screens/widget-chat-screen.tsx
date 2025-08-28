@@ -13,6 +13,8 @@ import { ArrowLeftIcon, MenuIcon } from 'lucide-react'
 import { Button } from '@workspace/ui/components/button'
 import { useAction, useQuery } from 'convex/react'
 import { api } from '@workspace/backend/_generated/api'
+import { userInfiniteScroll } from '@workspace/ui/hooks/use-infinite-scroll'
+import { InfiniteScrollTrigger } from '@workspace/ui/components/infinite-scroll-trigger'
 
 import {
   AIConversation,
@@ -31,6 +33,7 @@ import {
   AIInputToolbar,
   AIInputTools,
 } from '@workspace/ui/components/ai/input'
+import { DicebearAvatar } from '@workspace/ui/components/dicebear-avatar'
 
 import z from 'zod'
 import { useForm } from 'react-hook-form'
@@ -79,6 +82,13 @@ export const WidgetChatScreen = () => {
     }
   )
 
+  const { topElementRef, handleLoadMore, canLoadMore, isLoadingMore } =
+    userInfiniteScroll({
+      status: messages.status,
+      loadMore: messages.loadMore,
+      loadSize: 10,
+    })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -116,6 +126,12 @@ export const WidgetChatScreen = () => {
       </WidgetHeader>
       <AIConversation>
         <AIConversationContent>
+          <InfiniteScrollTrigger
+            onLoadMore={handleLoadMore}
+            canLoadMore={canLoadMore}
+            isLoadingMore={isLoadingMore}
+            ref={topElementRef}
+          />
           {toUIMessages(messages.results ?? [])?.map((message) => {
             return (
               <AIMessage
@@ -125,7 +141,13 @@ export const WidgetChatScreen = () => {
                 <AIMessageContent>
                   <AIResponse>{message.content}</AIResponse>
                 </AIMessageContent>
-                {/* TODO: Add Avatar component */}
+                {message.role === 'assistant' && (
+                  <DicebearAvatar
+                    imageUrl="/logo.svg"
+                    seed={'assistant'}
+                    size={32}
+                  />
+                )}
               </AIMessage>
             )
           })}
