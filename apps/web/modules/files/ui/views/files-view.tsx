@@ -123,14 +123,13 @@ export const FilesView = () => {
                   return files.results.map((file) => (
                     <TableRow key={file.id} className="hover:bg-muted/50">
                       <TableCell className="px-6 py-4">
-                        <div className="fle items-center gap-3">
+                        <div className="flex items-center gap-3">
                           <FileIcon />
                           {file.name}
                         </div>
                       </TableCell>
                       <TableCell className="px-6 py-4">
                         <Badge className="uppercase" variant={'outline'}>
-                          <FileIcon />
                           {file.type}
                         </Badge>
                       </TableCell>

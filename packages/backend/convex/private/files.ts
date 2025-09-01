@@ -242,7 +242,7 @@ async function convertEntryToPublicFile(
   }
 
   const filename = entry.key || 'unknown'
-  const extension = fileSize.split('.').pop()?.toLowerCase() || 'txt'
+  const extension = filename.split('.').pop()?.toLowerCase() || 'txt'
 
   let status: 'ready' | 'processing' | 'error' = 'error'
   if (entry.status === 'ready') {
