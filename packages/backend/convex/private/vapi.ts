@@ -48,8 +48,8 @@ export const getAssistants = action({
     // }>(secretValue)
 
     const secretData = {
-      publicApiKey: 'c31bda4b-d49e-40ca-9b78-4b826924a784',
-      privateApiKey: 'dc6293ae-51d5-446d-90c7-1f5dab8ebcd3',
+      publicApiKey: process.env.VAPI_PUBLIC_KEY,
+      privateApiKey: process.env.VAPI_PRIVATE_KEY,
     }
 
     if (!secretData) {
@@ -121,8 +121,8 @@ export const getPhoneNumbers = action({
     // }>(secretValue)
 
     const secretData = {
-      publicApiKey: 'c31bda4b-d49e-40ca-9b78-4b826924a784',
-      privateApiKey: 'dc6293ae-51d5-446d-90c7-1f5dab8ebcd3',
+      publicApiKey: process.env.VAPI_PUBLIC_KEY,
+      privateApiKey: process.env.VAPI_PRIVATE_KEY,
     }
 
     if (!secretData) {
