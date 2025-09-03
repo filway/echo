@@ -29,6 +29,9 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { Button } from '@workspace/ui/components/button'
 import { VapiConnectedView } from '../components/vapi-connected-view'
+import { useOrganization } from '@clerk/nextjs'
+import { createSecretDataAtom } from '../../atoms'
+import { useSetAtom } from 'jotai'
 
 const vapiFeatures: Feature[] = [
   {
@@ -66,6 +69,7 @@ const VapiPluginForm = ({
   setOpen: (open: boolean) => void
 }) => {
   const upsertSecret = useMutation(api.private.secrets.upsert)
+  const { organization, isLoaded } = useOrganization()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,8 +78,12 @@ const VapiPluginForm = ({
     },
   })
 
+  const secretDataAtom = createSecretDataAtom(organization?.id || '', 'vapi')
+  const setSecretDataAtom = useSetAtom(secretDataAtom)
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setSecretDataAtom(values)
       await upsertSecret({
         service: 'vapi',
         value: {
@@ -141,7 +149,10 @@ const VapiPluginForm = ({
               )}
             />
             <DialogFooter>
-              <Button disabled={form.formState.isSubmitting} type="submit">
+              <Button
+                disabled={form.formState.isSubmitting || !isLoaded}
+                type="submit"
+              >
                 {form.formState.isSubmitting ? 'Connecting...' : 'Connect'}
               </Button>
             </DialogFooter>
