@@ -1,5 +1,7 @@
 import Vapi from '@vapi-ai/web'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
+import { vapiSecretsAtom, widgetSettingsAtom } from '../atoms/widget-atoms'
 
 interface TranscriptMessage {
   role: 'user' | 'assistant'
@@ -7,6 +9,9 @@ interface TranscriptMessage {
 }
 
 export const useVapi = () => {
+  const vapiSecrets = useAtomValue(vapiSecretsAtom)
+  const widgetSettings = useAtomValue(widgetSettingsAtom)
+
   const [vapi, setVapi] = useState<Vapi | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
@@ -14,8 +19,11 @@ export const useVapi = () => {
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([])
 
   useEffect(() => {
-    // Only for testing the Vapi API, otherwise customers will need to provide their own API key
-    const vapiInstance = new Vapi('c31bda4b-d49e-40ca-9b78-4b826924a784')
+    if (!vapiSecrets) {
+      return
+    }
+
+    const vapiInstance = new Vapi(vapiSecrets.publicApiKey)
     setVapi(vapiInstance)
 
     vapiInstance.on('call-start', () => {
@@ -61,10 +69,14 @@ export const useVapi = () => {
   }, [])
 
   const startCall = () => {
+    if (!vapiSecrets || !widgetSettings?.vapiSettings?.assistantId) {
+      return
+    }
+
     setIsConnecting(true)
+
     if (vapi) {
-      // This is a demo bot ID, customers will need to create their own bots in the Vapi dashboard
-      vapi.start('91662409-e804-4114-a475-f73ef0b26349')
+      vapi.start(widgetSettings.vapiSettings.assistantId)
     }
   }
 

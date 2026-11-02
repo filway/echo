@@ -12,6 +12,7 @@ import { extractTextContent } from '../lib/extractTextContent'
 import rag from '../system/ai/rag'
 import { Id } from '../_generated/dataModel'
 import { paginationOptsValidator } from 'convex/server'
+import { internal } from '../_generated/api'
 
 function guessMimeType(filename: string, bytes: ArrayBuffer): string {
   return (
@@ -112,16 +113,22 @@ export const addFile = action({
     const { bytes, filename, category } = args
 
     const mimeType = args.mimeType || guessMimeType(filename, bytes)
+    const pdfText = mimeType.toLowerCase().includes('pdf')
+      ? await ctx.runAction(internal.lib.pdf.extractTextFromPdf, { bytes })
+      : null
     const blob = new Blob([bytes], { type: mimeType })
 
     const storageId = await ctx.storage.store(blob)
 
-    const text = await extractTextContent(ctx, {
-      storageId,
-      filename,
-      bytes,
-      mimeType,
-    })
+    let text = pdfText
+    if (text === null) {
+      text = await extractTextContent(ctx, {
+        storageId,
+        filename,
+        bytes,
+        mimeType,
+      })
+    }
 
     const { entryId, created } = await rag.add(ctx, {
       // 这里很重要：需要指定要添加到哪个搜索空间，不能跨越命名空间搜索

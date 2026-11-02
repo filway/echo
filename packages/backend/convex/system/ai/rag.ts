@@ -1,9 +1,9 @@
 import { RAG } from '@convex-dev/rag'
 import { components } from '../../_generated/api'
-import { myOpenAI } from './agents/supportAgent'
+import { openAIEmbeddings } from './providers'
 
 const rag = new RAG(components.rag, {
-  textEmbeddingModel: myOpenAI.embedding('text-embedding-3-small'),
+  textEmbeddingModel: openAIEmbeddings.embedding('text-embedding-3-small'),
   embeddingDimension: 1536,
 })
 

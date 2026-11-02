@@ -41,16 +41,16 @@ export const getAssistants = action({
     }
 
     const secretName = plugin.secretName
-    // const secretValue = await getSecretValue(secretName)
-    // const secretData = parseSecretString<{
-    //   privateApiKey: string
-    //   publicApiKey: string
-    // }>(secretValue)
+    const secretValue = await getSecretValue(secretName)
+    const secretData = parseSecretString<{
+      privateApiKey: string
+      publicApiKey: string
+    }>(secretValue)
 
-    const secretData = {
-      publicApiKey: process.env.VAPI_PUBLIC_KEY,
-      privateApiKey: process.env.VAPI_PRIVATE_KEY,
-    }
+    // const secretData = {
+    //   publicApiKey: process.env.VAPI_PUBLIC_KEY,
+    //   privateApiKey: process.env.VAPI_PRIVATE_KEY,
+    // }
 
     if (!secretData) {
       throw new ConvexError({

@@ -2,7 +2,8 @@ import { ConvexError, v } from 'convex/values'
 import { generateText } from 'ai'
 import { action, mutation, query } from '../_generated/server'
 import { components, internal } from '../_generated/api'
-import { myOpenAI, supportAgent } from '../system/ai/agents/supportAgent'
+import { supportAgent } from '../system/ai/agents/supportAgent'
+import { deepSeekChat } from '../system/ai/providers'
 import { paginationOptsValidator } from 'convex/server'
 import { saveMessage } from '@convex-dev/agent'
 import { OPERATOR_MESSAGE_ENHANCEMENT_PROMPT } from '../system/ai/constants'
@@ -31,7 +32,7 @@ export const enhanceResponse = action({
     }
 
     const response = await generateText({
-      model: myOpenAI('gpt-4o-mini'),
+      model: deepSeekChat,
       messages: [
         {
           role: 'system',

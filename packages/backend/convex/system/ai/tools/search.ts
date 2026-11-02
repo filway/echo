@@ -2,7 +2,8 @@ import { createTool } from '@convex-dev/agent'
 import { generateText } from 'ai'
 import z from 'zod'
 import { internal } from '../../../_generated/api'
-import { supportAgent, myOpenAI } from '../agents/supportAgent'
+import { supportAgent } from '../agents/supportAgent'
+import { deepSeekChat } from '../providers'
 import rag from '../rag'
 import { SEARCH_INTERPRETER_PROMPT } from '../constants'
 
@@ -52,7 +53,7 @@ export const search = createTool({
           content: `User asked: "${args.query}"\n\nSearch results: ${contextText}`,
         },
       ],
-      model: myOpenAI.chat('gpt-4o-mini'),
+      model: deepSeekChat,
     })
 
     await supportAgent.saveMessage(ctx, {

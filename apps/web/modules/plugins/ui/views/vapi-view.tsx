@@ -87,8 +87,8 @@ const VapiPluginForm = ({
       await upsertSecret({
         service: 'vapi',
         value: {
-          publicKey: values.publicApiKey,
-          privateKey: values.privateApiKey,
+          publicApiKey: values.publicApiKey,
+          privateApiKey: values.privateApiKey,
         },
       })
       setOpen(false)
